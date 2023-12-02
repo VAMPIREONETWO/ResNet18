@@ -8,7 +8,7 @@ class ResNet18(Model):
         super().__init__()
         # preprocessing layer
         self.pl = Sequential([
-            layers.Conv2D(64,(7,7),strides=2,),
+            layers.Conv2D(64,(7,7),strides=2,padding='same'),
             layers.BatchNormalization(),
             layers.Activation('relu'),
             layers.MaxPool2D(pool_size=(3,3),strides=2,padding='same')
@@ -25,12 +25,26 @@ class ResNet18(Model):
         self.block8 = ResidualBlock(512)
 
         # Fully Connected Layer
-        self.avg_pool = layers.GlobalAveragePooling2D()
+        # self.fc = Sequential(
+        #     layers.GlobalAveragePooling2D(),
+        #     layers.Dense(class_num)
+        # )
+        self.avg_pool = layers.GlobalAvgPool2D()
         self.fc = layers.Dense(class_num)
-        pass
 
     def call(self, inputs, training=None, mask=None):
-        pass
+        outputs = self.pl(inputs)
+        outputs = self.block1(outputs)
+        outputs = self.block2(outputs)
+        outputs = self.block3(outputs)
+        outputs = self.block4(outputs)
+        outputs = self.block5(outputs)
+        outputs = self.block6(outputs)
+        outputs = self.block7(outputs)
+        outputs = self.block8(outputs)
+        outputs = self.avg_pool(outputs)
+        outputs = self.fc(outputs)
+        return outputs
 
 
 class ResidualBlock(layers.Layer):
@@ -60,7 +74,7 @@ class ResidualBlock(layers.Layer):
         outputs = self.cl2(outputs)
         outputs = self.bn2(outputs)
 
-        outputs = layers.add(outputs, self.shortcut(inputs))
+        outputs = layers.add([outputs, self.shortcut(inputs)])
         outputs = self.relu2(outputs)
 
         return outputs
