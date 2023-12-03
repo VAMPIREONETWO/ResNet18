@@ -31,10 +31,13 @@ model.compile(optimizer="adam",
 model.summary()
 
 # train
-model.fit(x_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
+model.fit(x_train, y_train, epochs=10, batch_size=4, validation_split=0.2)
 
 y_pre = model.predict(x_test)
 print(y_pre)
 y_pre_label = np.argmax(y_pre, axis=1)
-print(y_pre_label)
-print(y_test)
+acc = 0
+for i in range(len(y_test)):
+    if y_pre_label[i] == y_test[i][0]:
+        acc+=1
+print(acc/len(y_test))
