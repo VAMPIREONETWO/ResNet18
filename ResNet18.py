@@ -25,10 +25,6 @@ class ResNet18(Model):
         self.block8 = ResidualBlock(512)
 
         # Fully Connected Layer
-        # self.fc = Sequential(
-        #     layers.GlobalAveragePooling2D(),
-        #     layers.Dense(class_num)
-        # )
         self.avg_pool = layers.GlobalAvgPool2D()
         self.fc = layers.Dense(class_num)
 
