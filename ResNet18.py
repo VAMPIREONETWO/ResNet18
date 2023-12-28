@@ -4,11 +4,16 @@ from keras import layers, Sequential, Model
 
 
 class ResNet18(Model):
-    def __init__(self, class_num):
+    def __init__(self, class_num, pre_filter_size=7):
+        """
+
+        :param class_num: the number of classes
+        :param pre_filter_size: the size of filters in the preprocessing layer
+        """
         super().__init__()
         # preprocessing layer
         self.pl = Sequential([
-            layers.Conv2D(64,(7,7),strides=2,padding='same'),
+            layers.Conv2D(64,(pre_filter_size,pre_filter_size),strides=2,padding='same'),
             layers.BatchNormalization(),
             layers.Activation('relu'),
             layers.MaxPool2D(pool_size=(3,3),strides=2,padding='same')

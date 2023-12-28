@@ -22,18 +22,17 @@ x_train = x_train / 255
 x_test = x_test / 255
 
 # model construction
-model = ResNet18(10)
+model = ResNet18(10,5)
 model.build(input_shape=(None, 32, 32, 3))
-model.compile(optimizer="adam",
+model.compile(optimizer=keras.optimizers.Adam(lr=0.001),
               loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 model.summary()
 
 # train
-model.fit(x_train, y_train, epochs=100, batch_size=32, validation_split=0.2)
+model.fit(x_train, y_train, epochs=20, batch_size=32, validation_split=0.2)
 
 y_pre = model.predict(x_test)
-print(y_pre)
 y_pre_label = np.argmax(y_pre, axis=1)
 acc = 0
 for i in range(len(y_test)):

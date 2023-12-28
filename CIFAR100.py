@@ -22,7 +22,7 @@ x_train = x_train / 255
 x_test = x_test / 255
 
 # model construction
-model = ResNet18(100)
+model = ResNet18(100,5)
 model.build(input_shape=(None, 32, 32, 3))
 model.compile(optimizer=keras.optimizers.Adam(),
               loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
