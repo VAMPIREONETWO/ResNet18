@@ -4,13 +4,13 @@ from ResNet18 import ResNet18
 from keras.datasets import cifar10
 import numpy as np
 
-using_gpu_index = 0  # 使用的 GPU 号码
+using_gpu_index = 0
 gpu_list = tf.config.experimental.list_physical_devices('GPU')
 if len(gpu_list) > 0:
     try:
         tf.config.experimental.set_virtual_device_configuration(
             gpu_list[using_gpu_index],
-            [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=3072)]
+            [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)]  # limit the size of GPU memory
         )
     except RuntimeError as e:
         print(e)

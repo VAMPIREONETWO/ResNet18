@@ -4,13 +4,13 @@ from keras import layers, Sequential, Model
 
 
 class ResNet18(Model):
-    def __init__(self, class_num, pre_filter_size=7):
+    def __init__(self, class_num, pre_filter_size=7, *args, **kwargs):
         """
 
         :param class_num: the number of classes
         :param pre_filter_size: the size of filters in the preprocessing layer
         """
-        super().__init__()
+        super().__init__(*args, **kwargs)
         # preprocessing layer
         self.pl = Sequential([
             layers.Conv2D(64,(pre_filter_size,pre_filter_size),strides=2,padding='same'),
@@ -49,8 +49,8 @@ class ResNet18(Model):
 
 
 class ResidualBlock(layers.Layer):
-    def __init__(self, filters, strides=1):
-        super(ResidualBlock, self).__init__()
+    def __init__(self, filters, strides=1, **kwargs):
+        super().__init__(**kwargs)
         self.filters = filters
         self.stride = strides
 
