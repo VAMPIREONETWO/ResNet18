@@ -6,6 +6,7 @@ class ResNet18(Model):
     def __init__(self, class_num,in_shape, pre_filter_size=7):
         """
 
+        :param in_shape: the shape of each example
         :param class_num: the number of classes
         :param pre_filter_size: the size of filters in the preprocessing layer
         """
