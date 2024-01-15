@@ -1,9 +1,9 @@
 from keras import layers, Sequential, Model
-from keras.layers import Conv2D, BatchNormalization, ReLU,MaxPool2D,Layer,GlobalAvgPool2D,Dense
+from keras.layers import Conv2D, BatchNormalization, ReLU,MaxPool2D,Layer,GlobalAvgPool2D,Dense,Input
 
 
 class ResNet18(Model):
-    def __init__(self, class_num, pre_filter_size=7):
+    def __init__(self, class_num,in_shape, pre_filter_size=7):
         """
 
         :param class_num: the number of classes
@@ -18,6 +18,8 @@ class ResNet18(Model):
             MaxPool2D(pool_size=(3,3),strides=2,padding='same')
         ])
 
+        self.input_layer = Input(in_shape)  # used to reveal output shape
+
         # Residual Blocks
         self.block1 = ResidualBlock(64)
         self.block2 = ResidualBlock(64)
@@ -31,6 +33,8 @@ class ResNet18(Model):
         # Fully Connected Layer
         self.avg_pool = GlobalAvgPool2D()
         self.fc = Dense(class_num)
+
+        self.call(self.input_layer)
 
     def call(self, inputs, training=None, mask=None):
         outputs = self.pl(inputs)
