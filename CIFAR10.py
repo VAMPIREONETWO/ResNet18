@@ -24,11 +24,11 @@ x_test = x_test / 255
 # model construction
 model = ResNet18(10,5)
 model.build(input_shape=(None, 32, 32, 3))
-model.compile(optimizer=keras.optimizers.Adam(lr=0.001),
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001),
               loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 model.summary()
 
 # train and predict
-model.fit(x_train, y_train, epochs=20, batch_size=32, validation_split=0.2)
+model.fit(x_train, y_train, epochs=20, batch_size=32)
 y_eva = model.evaluate(x_test, y_test, return_dict=True)

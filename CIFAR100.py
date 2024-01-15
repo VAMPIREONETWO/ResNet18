@@ -31,5 +31,5 @@ model.compile(optimizer=keras.optimizers.Adam(),
 model.summary()
 
 # train and predict
-model.fit(x_train, y_train, epochs=30, batch_size=32, validation_split=0.2)
+model.fit(x_train, y_train, epochs=20, batch_size=32)
 y_eva = model.evaluate(x_test, y_test, return_dict=True)

@@ -1,20 +1,21 @@
 from keras import layers, Sequential, Model
+from keras.layers import Conv2D, BatchNormalization, ReLU,MaxPool2D,Layer,GlobalAvgPool2D,Dense
 
 
 class ResNet18(Model):
-    def __init__(self, class_num, pre_filter_size=7, *args, **kwargs):
+    def __init__(self, class_num, pre_filter_size=7):
         """
 
         :param class_num: the number of classes
         :param pre_filter_size: the size of filters in the preprocessing layer
         """
-        super().__init__(*args, **kwargs)
+        super().__init__()
         # preprocessing layer
         self.pl = Sequential([
-            layers.Conv2D(64,(pre_filter_size,pre_filter_size),strides=2,padding='same'),
-            layers.BatchNormalization(),
-            layers.Activation('relu'),
-            layers.MaxPool2D(pool_size=(3,3),strides=2,padding='same')
+            Conv2D(64,(pre_filter_size,pre_filter_size),strides=2,padding='same'),
+            BatchNormalization(),
+            ReLU(),
+            MaxPool2D(pool_size=(3,3),strides=2,padding='same')
         ])
 
         # Residual Blocks
@@ -28,8 +29,8 @@ class ResNet18(Model):
         self.block8 = ResidualBlock(512)
 
         # Fully Connected Layer
-        self.avg_pool = layers.GlobalAvgPool2D()
-        self.fc = layers.Dense(class_num)
+        self.avg_pool = GlobalAvgPool2D()
+        self.fc = Dense(class_num)
 
     def call(self, inputs, training=None, mask=None):
         outputs = self.pl(inputs)
@@ -46,24 +47,24 @@ class ResNet18(Model):
         return outputs
 
 
-class ResidualBlock(layers.Layer):
-    def __init__(self, filters, strides=1, **kwargs):
-        super().__init__(**kwargs)
+class ResidualBlock(Layer):
+    def __init__(self, filters, strides=1):
+        super().__init__()
         self.filters = filters
         self.stride = strides
 
-        self.cl1 = layers.Conv2D(filters=filters, kernel_size=(3, 3), strides=strides, padding="same")
-        self.bn1 = layers.BatchNormalization()
-        self.relu1 = layers.Activation("relu")
+        self.cl1 = Conv2D(filters=filters, kernel_size=(3, 3), strides=strides, padding="same")
+        self.bn1 = BatchNormalization()
+        self.relu1 = ReLU()
 
-        self.cl2 = layers.Conv2D(filters=filters, kernel_size=(3, 3), strides=1, padding="same")
-        self.bn2 = layers.BatchNormalization()
+        self.cl2 = Conv2D(filters=filters, kernel_size=(3, 3), strides=1, padding="same")
+        self.bn2 = BatchNormalization()
 
         if strides != 1:
-            self.shortcut = layers.Conv2D(filters=filters, kernel_size=(1, 1), strides=strides)
+            self.shortcut = Conv2D(filters=filters, kernel_size=(1, 1), strides=strides)
         else:
             self.shortcut = lambda x: x
-        self.relu2 = layers.Activation("relu")
+        self.relu2 = ReLU()
 
     def call(self, inputs, *args, **kwargs):
         outputs = self.cl1(inputs)
