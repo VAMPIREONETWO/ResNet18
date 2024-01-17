@@ -55,8 +55,6 @@ class ResNet18(Model):
 class ResidualBlock(Layer):
     def __init__(self, filters, strides=1):
         super().__init__()
-        self.filters = filters
-        self.stride = strides
 
         self.cl1 = Conv2D(filters=filters, kernel_size=(3, 3), strides=strides, padding="same")
         self.bn1 = BatchNormalization()
@@ -66,7 +64,8 @@ class ResidualBlock(Layer):
         self.bn2 = BatchNormalization()
 
         if strides != 1:
-            self.shortcut = Conv2D(filters=filters, kernel_size=(1, 1), strides=strides)
+            self.shortcut = Sequential([Conv2D(filters=filters, kernel_size=(1, 1), strides=strides),
+                                        BatchNormalization()])
         else:
             self.shortcut = lambda x: x
         self.relu2 = ReLU()

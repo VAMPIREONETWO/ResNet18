@@ -2,7 +2,6 @@ import tensorflow as tf
 from tensorflow import keras
 from ResNet18 import ResNet18
 from keras.datasets import cifar100
-import numpy as np
 
 using_gpu_index = 0
 gpu_list = tf.config.experimental.list_physical_devices('GPU')
